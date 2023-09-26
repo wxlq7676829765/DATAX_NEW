@@ -223,6 +223,7 @@ public class UnstructuredStorageReaderUtil {
 			//文件转 字节集
 			String fileFormat = readerSliceConfig.getString(Key.FILE_FORMAT);
 			if("file2file".equals(fileFormat)||"file2file".equals(fileFormat)){
+
 				byte[] buffer = IOUtils.toByteArray(inputStream);
 				UnstructuredStorageReaderUtil.doReadFromStream(inputStream,reader, context,
 						readerSliceConfig, recordSender, taskPluginCollector,buffer);
