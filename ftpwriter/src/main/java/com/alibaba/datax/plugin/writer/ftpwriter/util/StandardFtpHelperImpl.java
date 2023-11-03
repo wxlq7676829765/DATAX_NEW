@@ -359,9 +359,9 @@ public class StandardFtpHelperImpl implements IFtpHelper {
             ftpClient.enterLocalPassiveMode();
             String ftpPath2 = new String(dir.getBytes(LOCAL_CHARSET),FTPClient.DEFAULT_CONTROL_ENCODING);
 
-            LOG.info("LOCAL_CHARSET---------------------------------"+LOCAL_CHARSET);
-
-            LOG.info("ftpPath2---------------------------------"+ftpPath2);
+//            LOG.info("LOCAL_CHARSET---------------------------------"+LOCAL_CHARSET);
+//
+//            LOG.info("ftpPath2---------------------------------"+ftpPath2);
 
             boolean isDirExist = this.ftpClient.changeWorkingDirectory(ftpPath2);
             if (!isDirExist) {
