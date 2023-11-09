@@ -195,13 +195,13 @@ public class StandardFtpHelper extends FtpHelper {
 				ftpClient.enterLocalPassiveMode();
 				String ftpPath2 = new String(directoryPath.getBytes(LOCAL_CHARSET),SERVER_CHARSET);
 
-				LOG.info("LOCAL_CHARSET---------------------------------"+LOCAL_CHARSET);
+				/*LOG.info("LOCAL_CHARSET_AAAA---------------------------------"+LOCAL_CHARSET);
 
 				LOG.info("ftpPath2---------------------------------"+ftpPath2);
-
+				LOG.info("IOUtils.DIR_SEPARATOR---------------------------------"+IOUtils.DIR_SEPARATOR);*/
 				FTPFile[] fs = ftpClient.listFiles(ftpPath2);
 				for (FTPFile ff : fs) {
-					String strName = ff.getName();
+					String strName = getFtpFinalName(ff.getName());
 					String filePath = parentPath + strName;
 					if (ff.isDirectory()) {
 						if (!(strName.equals(".") || strName.equals(".."))) {
@@ -211,7 +211,7 @@ public class StandardFtpHelper extends FtpHelper {
 						}
 					} else if (ff.isFile()) {
 						// 是文件
-						sourceFiles.add(filePath);						
+						sourceFiles.add(filePath);
 					} else if(ff.isSymbolicLink()){
 						//是链接文件
 						String message = String.format("文件:[%s]是链接文件，当前不支持链接文件的读取", filePath);
@@ -224,6 +224,7 @@ public class StandardFtpHelper extends FtpHelper {
 					}
 				} // end for FTPFile
 			} catch (IOException e) {
+				LOG.error("报错啦---"+e.getMessage());
 				String message = String.format("获取path：[%s] 下文件列表时发生I/O异常,请确认与ftp服务器的连接正常", directoryPath);
 				LOG.error(message);
 				throw DataXException.asDataXException(FtpReaderErrorCode.COMMAND_FTP_IO_EXCEPTION, message, e);
@@ -236,6 +237,22 @@ public class StandardFtpHelper extends FtpHelper {
 			LOG.error(message);
 			throw DataXException.asDataXException(FtpReaderErrorCode.OUT_MAX_DIRECTORY_LEVEL, message);
 		}
+	}
+
+	/*
+	* 这里为什么要这样写，
+	* 因为有些ftp的ff.getName() 获取的不是文件名称是路径 所以需要特殊处理一下
+	* */
+	public String getFtpFinalName(String name){
+		String finalName = null;
+		String x = String.valueOf(IOUtils.DIR_SEPARATOR);
+		if(name!=null&&name.contains(x)){
+			int a = name.lastIndexOf(IOUtils.DIR_SEPARATOR);
+			finalName = name.substring(a+1,name.length());
+		}else{
+			finalName = name;
+		}
+		return finalName;
 	}
 
 	@Override

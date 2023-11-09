@@ -1,5 +1,6 @@
 package com.alibaba.datax.common.spi;
 
+import java.io.IOException;
 import java.util.List;
 
 import com.alibaba.datax.common.base.BaseObject;
@@ -47,6 +48,6 @@ public abstract class Reader extends BaseObject {
 	}
 
 	public static abstract class Task extends AbstractTaskPlugin {
-		public abstract void startRead(RecordSender recordSender);
+		public abstract void startRead(RecordSender recordSender) throws IOException;
 	}
 }

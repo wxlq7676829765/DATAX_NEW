@@ -1,10 +1,15 @@
 package com.alibaba.datax.plugin.reader.ftpreader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.List;
 
 public abstract class FtpHelper {
+
+	private static final Logger LOG = LoggerFactory.getLogger(FtpHelper.class);
 	/**
 	 * 
 	* @Title: LoginFtpServer 
@@ -102,6 +107,7 @@ public abstract class FtpHelper {
 				sourceAllFiles.addAll(getListFiles(eachPath, parentLevel, maxTraversalLevel));
 			}
 		}
+		LOG.info("getAllFiles---------------------------------方法完成");
 		return sourceAllFiles;
 	}
 
