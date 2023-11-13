@@ -6,6 +6,7 @@ import com.alibaba.datax.plugin.rdbms.util.DBUtil;
 import com.alibaba.datax.plugin.rdbms.util.DataBaseType;
 import com.alibaba.datax.plugin.rdbms.writer.CommonRdbmsWriter;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -27,9 +28,9 @@ public class SubCommonRdbmsWriter extends CommonRdbmsWriter {
         }
 
         @Override
-        protected PreparedStatement fillPreparedStatementColumnType(
-                PreparedStatement preparedStatement, int columnIndex,
-                int columnSqltype, Column column) throws SQLException {
+        protected PreparedStatement fillPreparedStatementColumnType(Connection conn,
+                                                                    PreparedStatement preparedStatement, int columnIndex,
+                                                                    int columnSqltype, Column column) throws SQLException {
             java.util.Date utilDate;
             try {
                 switch (columnSqltype) {

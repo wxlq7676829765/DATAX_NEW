@@ -17,10 +17,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -350,7 +347,7 @@ public class CommonRdbmsWriter {
                         .prepareStatement(this.writeRecordSql);
 
                 for (Record record : buffer) {
-                    preparedStatement = fillPreparedStatement(
+                    preparedStatement = fillPreparedStatement(connection,
                             preparedStatement, record);
                     preparedStatement.addBatch();
                 }
@@ -377,7 +374,7 @@ public class CommonRdbmsWriter {
 
                 for (Record record : buffer) {
                     try {
-                        preparedStatement = fillPreparedStatement(
+                        preparedStatement = fillPreparedStatement(connection,
                                 preparedStatement, record);
                         preparedStatement.execute();
                     } catch (SQLException e) {
@@ -398,22 +395,28 @@ public class CommonRdbmsWriter {
         }
 
         // 直接使用了两个类变量：columnNumber,resultSetMetaData
-        protected PreparedStatement fillPreparedStatement(PreparedStatement preparedStatement, Record record)
+        protected PreparedStatement fillPreparedStatement(Connection connection,PreparedStatement preparedStatement, Record record)
                 throws SQLException {
             for (int i = 0; i < this.columnNumber; i++) {
                 int columnSqltype = this.resultSetMetaData.getMiddle().get(i);
-                preparedStatement = fillPreparedStatementColumnType(preparedStatement, i, columnSqltype, record.getColumn(i));
+                preparedStatement = fillPreparedStatementColumnType(connection,preparedStatement, i, columnSqltype, record.getColumn(i));
             }
 
             return preparedStatement;
         }
 
-        protected PreparedStatement fillPreparedStatementColumnType(PreparedStatement preparedStatement, int columnIndex, int columnSqltype, Column column) throws SQLException {
+        protected PreparedStatement fillPreparedStatementColumnType(Connection connection,PreparedStatement preparedStatement, int columnIndex, int columnSqltype, Column column) throws SQLException {
             java.util.Date utilDate;
             switch (columnSqltype) {
+                case Types.CLOB:
+                    // Convert String to Clob
+                    Clob clob = connection.createClob();
+                    clob.setString(1, column.asString());
+                    preparedStatement.setClob(columnIndex + 1, clob);
+                    break;
+
                 case Types.CHAR:
                 case Types.NCHAR:
-                case Types.CLOB:
                 case Types.NCLOB:
                 case Types.VARCHAR:
                 case Types.LONGVARCHAR:
