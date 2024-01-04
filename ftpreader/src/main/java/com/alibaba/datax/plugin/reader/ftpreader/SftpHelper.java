@@ -195,6 +195,7 @@ public class SftpHelper extends FtpHelper {
 					LsEntry le = (LsEntry) vector.get(i);
 					String strName = le.getFilename();
 					String filePath = parentPath + strName;
+
 	
 					if (isDirExist(filePath)) {
 						// 是子目录
