@@ -63,6 +63,11 @@ public class HttpUtils {
 
 		HttpGet httpget = new HttpGet(url);
 		/** set timeout、request time、socket timeout */
+		/*
+		* Constants.HTTP_CONNECT_TIMEOUT = 60 * 60 * 1000
+		* Constants.HTTP_CONNECTION_REQUEST_TIMEOUT = 60 * 60 * 1000
+		* Constants.SOCKET_TIMEOUT = 60 * 60 * 1000
+		* */
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(Constants.HTTP_CONNECT_TIMEOUT)
 				.setConnectionRequestTimeout(Constants.HTTP_CONNECTION_REQUEST_TIMEOUT)
 				.setSocketTimeout(Constants.SOCKET_TIMEOUT)
@@ -78,7 +83,9 @@ public class HttpUtils {
 			if (response.getStatusLine().getStatusCode() == 200) {
 				HttpEntity entity = response.getEntity();
 				if (entity != null) {
-
+					/*
+					* Constants.UTF_8 = = "UTF-8"
+					* */
 					responseContent = EntityUtils.toString(entity, Constants.UTF_8);
 				}else{
 					logger.warn("http entity is null");
@@ -119,6 +126,11 @@ public class HttpUtils {
 
 		HttpPost httpPost = new HttpPost(url);
 		/** set timeout、request time、socket timeout */
+		/*
+		 * Constants.HTTP_CONNECT_TIMEOUT = 60 * 60 * 1000
+		 * Constants.HTTP_CONNECTION_REQUEST_TIMEOUT = 60 * 60 * 1000
+		 * Constants.SOCKET_TIMEOUT = 60 * 60 * 1000
+		 * */
 		RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(Constants.HTTP_CONNECT_TIMEOUT)
 				.setConnectionRequestTimeout(Constants.HTTP_CONNECTION_REQUEST_TIMEOUT)
 				.setSocketTimeout(Constants.SOCKET_TIMEOUT)
@@ -197,6 +209,9 @@ public class HttpUtils {
 		if (entity != null) {
 			//按指定编码转换结果实体为String类型
 			try {
+				/*
+				 * Constants.UTF_8 = = "UTF-8"
+				 * */
 				body = EntityUtils.toString(entity, Constants.UTF_8);
 			} catch (IOException e) {
 				e.printStackTrace();
